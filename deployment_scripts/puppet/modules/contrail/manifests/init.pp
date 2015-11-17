@@ -22,6 +22,8 @@ $settings = hiera('contrail', {})
 $plugin_version = '3.0'
 $distribution=$settings['contrail_distribution']
 
+$enable_lb=$settings['contrail_lb']
+
 $network_scheme = hiera_hash('network_scheme', {})
 $network_metadata = hiera_hash('network_metadata', {})
 $uid = hiera('uid')

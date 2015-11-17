@@ -15,6 +15,12 @@ attributes:
         label: "OpenContrail"
       - data: "juniper"
         label: "Juniper Contrail"
+  contrail_lb:
+    type: "checkbox"
+    weight: 15
+    value: true
+    label: "Enable Neutron LBaaS Plugin"
+    description: "LBaaS Plugin should be disabled while using contrail 2.x with kilo"
   contrail_asnum:
     value: '64512'
     label: 'AS Number'

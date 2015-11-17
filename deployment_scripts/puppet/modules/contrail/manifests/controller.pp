@@ -55,9 +55,13 @@ class contrail::controller {
   neutron_config {
     'DEFAULT/core_plugin': value => 'neutron_plugin_contrail.plugins.opencontrail.contrail_plugin.NeutronPluginContrailCoreV2';
     'DEFAULT/api_extensions_path': value => 'extensions:/usr/lib/python2.7/dist-packages/neutron_plugin_contrail/extensions';
-    'DEFAULT/service_plugins': value => 'neutron_plugin_contrail.plugins.opencontrail.loadbalancer.plugin.LoadBalancerPlugin';
+    if $contrail::enable_lb {
+        'DEFAULT/service_plugins': value => 'neutron_plugin_contrail.plugins.opencontrail.loadbalancer.plugin.LoadBalancerPlugin';
+        'service_providers/service_provider': value => 'LOADBALANCER:Opencontrail:neutron_plugin_contrail.plugins.opencontrail.loadbalancer.driver.OpencontrailLoadbalancerDriver:default';
+    } else {
+        'DEFAULT/service_plugins': value => '';
+    }
     'DEFAULT/allow_overlapping_ips': value => 'True';
-    'service_providers/service_provider': value => 'LOADBALANCER:Opencontrail:neutron_plugin_contrail.plugins.opencontrail.loadbalancer.driver.OpencontrailLoadbalancerDriver:default';
     'keystone_authtoken/auth_host': value => $contrail::mos_mgmt_vip;
     'keystone_authtoken/auth_port': value => '35357';
     'keystone_authtoken/auth_protocol': value => 'http';
