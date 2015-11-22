@@ -1,0 +1,4 @@
+
+class opencontrail {
+  include contrail
+}

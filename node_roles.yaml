@@ -4,9 +4,6 @@ contrail-db:
   has_primary: true
   public_ip_required: false
   weight: 100
-  conflicts:
-    - controller
-    - compute
 
 contrail-config: 
   name: Contrail - Config
@@ -16,9 +13,6 @@ contrail-config:
   has_primary: true
   public_ip_required: false
   weight: 100
-  conflicts:
-    - controller
-    - compute
 
 contrail-control:
   name: Contrail - Control
@@ -27,6 +21,3 @@ contrail-control:
   has_primary: true
   public_ip_required: false
   weight: 100
-  conflicts:
-    - controller
-    - compute 

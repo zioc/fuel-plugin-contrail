@@ -21,7 +21,7 @@ class contrail::provision_contrail {
 
   define contrail::provision::prov_ext_bgp {
     exec { "prov_external_bgp_${name}":
-      command => "python /opt/contrail/utils/provision_mx.py  \
+      command => "python /usr/share/contrail-utils/provision_mx.py  \
 --api_server_ip ${contrail::contrail_mgmt_vip} --api_server_port 8082 \
 --oper add --router_name ${name} --router_ip ${name} \
 --admin_user neutron --admin_tenant_name services --admin_password ${contrail::service_token} \
@@ -44,7 +44,7 @@ then exit 1; fi",
   } ->
 
   exec { 'prov_metadata_services':
-    command => "python /opt/contrail/utils/provision_linklocal.py \
+    command => "python /usr/share/contrail-utils/provision_linklocal.py \
 --api_server_ip ${contrail::contrail_mgmt_vip} --api_server_port 8082 \
 --oper add \
 --linklocal_service_name metadata --linklocal_service_ip 169.254.169.254 --linklocal_service_port 80 \
@@ -56,7 +56,7 @@ then exit 1; fi",
   } ->
 
   exec { 'prov_encap_type':
-      command => "python /opt/contrail/utils/provision_encap.py \
+      command => "python /usr/share/contrail-utils/provision_encap.py \
 --api_server_ip ${contrail::contrail_mgmt_vip} --api_server_port 8082 \
 --oper add --encap_priority MPLSoUDP,MPLSoGRE,VXLAN \
 --admin_user ${contrail::admin_username} --admin_password ${contrail::admin_password} \

@@ -12,14 +12,17 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-notice('MODULAR: contrail/contrail-db.pp')
+class opencontrail::utils {
 
-include contrail
-case $contrail::distribution {
-  juniper: { class { 'contrail::database': } }
-  open: {
-    include opencontrail
-    class {'opencontrail::database': }
+# Resources defaults
+  Package { ensure => present }
+
+# Create contrail directory to store *-DONE files
+  file { '/opt/contrail':
+    ensure => 'directory',
   }
-}
 
+# Packages
+  package { 'contrail-utils': } ->
+  package { 'contrail-nodemgr': }
+}

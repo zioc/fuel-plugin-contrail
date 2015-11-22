@@ -15,4 +15,12 @@
 notice('MODULAR: contrail/contrail-control.pp')
 
 include contrail
-class { 'contrail::control': }
+case $contrail::distribution {
+  juniper: { class { 'contrail::control': } }
+  open: {
+    include opencontrail
+    class {'opencontrail::repo': } ->
+    class {'opencontrail::utils': } ->
+    class {'opencontrail::control': }
+  }
+}

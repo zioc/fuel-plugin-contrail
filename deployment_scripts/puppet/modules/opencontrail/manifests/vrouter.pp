@@ -12,12 +12,12 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-class contrail::vrouter {
+class opencontrail::vrouter {
 
-    class { 'contrail::package':
-      install => ['contrail-openstack-vrouter','contrail-vrouter-dkms','contrail-utils','iproute2','haproxy','libatm1'],
-      remove  => ['openvswitch-common','openvswitch-datapath-dkms','openvswitch-datapath-lts-saucy-dkms','openvswitch-switch','nova-network','nova-api'],
-    }
+  class { 'contrail::package':
+    install => ['contrail-vrouter-agent','contrail-vrouter-dkms','contrail-nova-driver','iproute2','haproxy','libatm1'],
+    remove  => ['openvswitch-common','openvswitch-datapath-dkms','openvswitch-datapath-lts-saucy-dkms','openvswitch-switch','nova-network','nova-api','python-docker','heat-docker'],
+  }
 
   file {'/etc/contrail/agent_param':
     ensure  => present,

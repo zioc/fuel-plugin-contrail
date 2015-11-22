@@ -213,3 +213,13 @@
   parameters:
     cmd: if [ ! -f /opt/contrail/reboot-vrouter-DONE ]; then touch /opt/contrail/reboot-vrouter-DONE && /sbin/reboot; fi
     timeout: 720
+# Provision compute node on contrail API after reboot, for them to get back ip connectivity
+- id: compute-provision
+  type: puppet
+  role: [compute]
+  required_for: [post_deployment_end]
+  requires: [contrail-config, compute-reboot]
+  parameters:
+    puppet_manifest: puppet/manifests/compute-provision.pp
+    puppet_modules: puppet/modules:/etc/puppet/modules
+    timeout: 720

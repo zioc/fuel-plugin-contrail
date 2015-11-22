@@ -17,7 +17,6 @@ notice('MODULAR: contrail/compute-config.pp')
 $node_role = 'compute'
 include contrail
 
-class { 'contrail::provision_compute': } ->
 class { 'contrail::network':
   node_role => $node_role,
   address   => $contrail::address,
@@ -25,4 +24,15 @@ class { 'contrail::network':
   netmask   => $contrail::netmask_short,
 } ->
 class { 'contrail::compute': } ->
-class { 'contrail::vrouter': }
+
+case $contrail::distribution {
+  juniper: {
+    class { 'contrail::vrouter': }
+  }
+  open: {
+    include opencontrail
+    class {'opencontrail::repo': } ->
+    class {'opencontrail::utils': } ->
+    class {'opencontrail::vrouter': }
+  }
+}

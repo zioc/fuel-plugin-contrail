@@ -29,6 +29,7 @@ class contrail::package (
 
     package { $install:
       ensure  => present,
+      require => Package[$remove],
     }
     if ($pip_install) {
       contrail::package::exec_pip { $pip_install:

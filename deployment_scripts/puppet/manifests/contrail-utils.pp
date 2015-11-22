@@ -23,18 +23,20 @@ sysctl::value {
 
 case $operatingsystem {
   Ubuntu: {
-    file { '/etc/apt/preferences.d/contrail-pin-100':
-      ensure => file,
-      source => 'puppet:///modules/contrail/contrail-pin-100',
-    } ->
-    exec { 'reinstall-tzdata':
-      path    => '/bin:/sbin:/usr/bin:/usr/sbin',
-      command => '/usr/bin/apt-get install -y --force-yes tzdata',
-      before  => Class['contrail::package'],
+    if $contrail::distribution == juniper {
+      file { '/etc/apt/preferences.d/contrail-pin-100':
+        ensure => file,
+        source => 'puppet:///modules/contrail/contrail-pin-100',
+      } ->
+      exec { 'reinstall-tzdata':
+        path    => '/bin:/sbin:/usr/bin:/usr/sbin',
+        command => '/usr/bin/apt-get install -y --force-yes tzdata',
+        before  => Class['contrail::package'],
+      }
+      $pkgs = ['python-crypto','python-netaddr','python-paramiko',
+        'ifenslave-2.6','patch','openjdk-7-jre-headless',
+        'python-contrail','contrail-setup','contrail-utils','contrail-nodemgr','supervisor']
     }
-    $pkgs = ['python-crypto','python-netaddr','python-paramiko',
-      'ifenslave-2.6','patch','openjdk-7-jre-headless',
-      'python-contrail','contrail-setup','contrail-utils','contrail-nodemgr','supervisor']
   }
 
   CentOS: {

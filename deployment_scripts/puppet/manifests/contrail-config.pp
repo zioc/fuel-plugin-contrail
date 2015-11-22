@@ -15,8 +15,19 @@
 notice('MODULAR: contrail/contrail-config.pp')
 
 include contrail
-class { 'contrail::config': } ->
-class { 'contrail::analytics': } ->
-class { 'contrail::webui': }
 
-
+case $contrail::distribution {
+  juniper: {
+    class { 'contrail::config': } ->
+    class { 'contrail::analytics': } ->
+    class { 'contrail::webui': }
+  }
+  open: {
+    include opencontrail
+    class { 'opencontrail::repo': } ->
+    class { 'opencontrail::utils': } ->
+    class { 'opencontrail::config': } ->
+    class { 'opencontrail::analytics': } ->
+    class { 'opencontrail::webui': }
+  }
+}
