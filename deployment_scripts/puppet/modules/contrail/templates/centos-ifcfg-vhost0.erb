@@ -3,7 +3,7 @@ ONBOOT=yes
 BOOTPROTO=none
 IPV6INIT=no
 USERCTL=yes
-IPADDR=<%= scope.lookupvar('contrail::address') %>
-NETMASK=<%= scope.lookupvar('contrail::netmask') %>
+IPADDR=<%= scope.lookupvar('contrail::data_address') %>
+NETMASK=<%= scope.lookupvar('contrail::data_netmask') %>
 NM_CONTROLLED=no
 

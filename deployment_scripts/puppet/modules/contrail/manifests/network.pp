@@ -12,16 +12,10 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-class contrail::network (
-  $node_role,
-  $address,
-  $ifname = undef,
-  $netmask,
-  $default_gw = undef
-  ) {
+class contrail::network {
   $br_file = $::operatingsystem ? {
-      'Ubuntu' => '/etc/network/interfaces.d/ifcfg-br-mesh',
-      'CentOS' => '/etc/sysconfig/network-scripts/ifcfg-br-mesh',
+      'Ubuntu' => "/etc/network/interfaces.d/ifcfg-${contrail::data_interface}",
+      'CentOS' => "/etc/sysconfig/network-scripts/ifcfg-${contrail::data_interface}",
   }
 
   Exec {
@@ -31,12 +25,12 @@ class contrail::network (
 
   file { $br_file: ensure => absent } ->
   # Remove interface from the bridge
-  exec {"remove_${ifname}_mesh":
-    command => "brctl delif br-mesh ${ifname}",
+  exec {"remove_${contrail::data_phys_dev}_mesh":
+    command => "brctl delif ${contrail::data_interface} ${contrail::data_phys_dev}",
     returns => [0,1] # Idempotent
   } ->
   exec {'flush_addr_br_mesh':
-    command => 'ip addr flush dev br-mesh',
+    command => "ip addr flush dev ${contrail::data_interface}",
     returns => [0,1] # Idempotent
   }
   case $::operatingsystem {
@@ -47,8 +41,8 @@ class contrail::network (
       }
     }
     'CentOS': {
-      exec {"remove_bridge_from_${ifname}_config":
-        command => "sed -i '/BRIDGE/d' /etc/sysconfig/network-scripts/ifcfg-${ifname}",
+      exec {"remove_bridge_from_${contrail::data_phys_dev}_config":
+        command => "sed -i '/BRIDGE/d' /etc/sysconfig/network-scripts/ifcfg-${contrail::data_phys_dev}",
       }
       file {'/etc/sysconfig/network-scripts/ifcfg-vhost0':
         ensure  => present,

@@ -18,11 +18,6 @@ $node_role = 'compute'
 include contrail
 
 class { 'contrail::provision_compute': } ->
-class { 'contrail::network':
-  node_role => $node_role,
-  address   => $contrail::address,
-  ifname    => $contrail::phys_dev,
-  netmask   => $contrail::netmask_short,
-} ->
+class { 'contrail::network': } ->
 class { 'contrail::compute': } ->
 class { 'contrail::vrouter': }

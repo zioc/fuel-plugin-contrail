@@ -17,10 +17,10 @@ metadata_proxy_secret=<%= scope.lookupvar('contrail::metadata_secret') %>
 control_network_ip=<%= scope.lookupvar('contrail::address') %>
 [VIRTUAL-HOST-INTERFACE]
 name=vhost0
-ip=<%= scope.lookupvar('contrail::address') %>/<%= scope.lookupvar('contrail::netmask_short') %>
-physical_interface=<%= scope.lookupvar('contrail::phys_dev') %>
-<% if scope.lookupvar('contrail::gateway') != :undef -%>
-gateway=<%= scope.lookupvar('contrail::gateway') %>
+ip=<%= scope.lookupvar('contrail::data_address') %>/<%= scope.lookupvar('contrail::data_netmask_short') %>
+physical_interface=<%= scope.lookupvar('contrail::data_phys_dev') %>
+<% if scope.lookupvar('contrail::data_gateway') != :undef -%>
+gateway=<%= scope.lookupvar('contrail::data_gateway') %>
 <% end -%>
 [GATEWAY-0]
 [GATEWAY-1]

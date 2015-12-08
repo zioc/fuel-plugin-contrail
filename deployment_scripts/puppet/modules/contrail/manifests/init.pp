@@ -51,18 +51,21 @@ $gateways = split($settings['contrail_gateways'], ',')
 
 # Network configuration
 prepare_network_config($network_scheme)
-$interface=get_network_role_property('neutron/mesh', 'interface')
-$gateway=$network_scheme['endpoints'][$interface]['gateway']
-$address=get_network_role_property('neutron/mesh', 'ipaddr')
-$cidr=get_network_role_property('neutron/mesh', 'cidr')
-$netmask=get_network_role_property('neutron/mesh', 'netmask')
-$netmask_short=netmask_to_cidr($netmask)
-$phys_dev=get_private_ifname($interface)
+
+$data_phys_dev_list=get_network_role_property('contrail/data', 'phys_dev')
+$data_phys_dev=$data_phys_dev_list[0]
+$data_interface=get_network_role_property('contrail/data', 'interface')
+$data_gateway=$network_scheme['endpoints'][$data_interface]['gateway']
+$data_address=get_network_role_property('contrail/data', 'ipaddr')
+$data_netmask=get_network_role_property('contrail/data', 'netmask')
+$data_netmask_short=netmask_to_cidr($netmask)
+
+$address=get_network_role_property('contrail/mgmt', 'ipaddr')
 
 $mos_mgmt_vip=$network_metadata['vips']['management']['ipaddr']
 $mos_public_vip=$network_metadata['vips']['public']['ipaddr']
 
-$contrail_private_vip=$network_metadata['vips']['contrail_priv']['ipaddr']
+$contrail_private_vip=$network_metadata['vips']['contrail_mgmt_vip']['ipaddr']
 $contrail_mgmt_vip=$contrail_private_vip
 
 # Settings for RabbitMQ on contrail controllers
@@ -76,16 +79,16 @@ $rabbit_ips                = values(get_node_to_ipaddr_map_by_network_role($rabb
 
 # Contrail DB nodes Private IP list
 $primary_contrail_db_nodes_hash = get_nodes_hash_by_roles(hiera('network_metadata'), ['primary-contrail-db'])
-$primary_contrail_db_ip         = values(get_node_to_ipaddr_map_by_network_role($primary_contrail_db_nodes_hash, 'neutron/mesh'))
+$primary_contrail_db_ip         = values(get_node_to_ipaddr_map_by_network_role($primary_contrail_db_nodes_hash, 'contrail/mgmt'))
 
 $contrail_db_nodes_hash         = get_nodes_hash_by_roles(hiera('network_metadata'), ['primary-contrail-db', 'contrail-db'])
-$contrail_db_ips                = values(get_node_to_ipaddr_map_by_network_role($contrail_db_nodes_hash, 'neutron/mesh'))
+$contrail_db_ips                = values(get_node_to_ipaddr_map_by_network_role($contrail_db_nodes_hash, 'contrail/mgmt'))
 
 # Contrail Control nodes Private IP list
 $contrail_control_nodes_hash    = get_nodes_hash_by_roles(hiera('network_metadata'), ['primary-contrail-control', 'contrail-control'])
-$contrail_control_ips           = values(get_node_to_ipaddr_map_by_network_role($contrail_control_nodes_hash, 'neutron/mesh'))
+$contrail_control_ips           = values(get_node_to_ipaddr_map_by_network_role($contrail_control_nodes_hash, 'contrail/mgmt'))
 
 # Contrail Config nodes Private IP list
 $contrail_config_nodes_hash     = get_nodes_hash_by_roles(hiera('network_metadata'), ['primary-contrail-config', 'contrail-config'])
-$contrail_config_ips            = values(get_node_to_ipaddr_map_by_network_role($contrail_config_nodes_hash, 'neutron/mesh'))
+$contrail_config_ips            = values(get_node_to_ipaddr_map_by_network_role($contrail_config_nodes_hash, 'contrail/mgmt'))
 }
