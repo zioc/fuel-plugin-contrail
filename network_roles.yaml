@@ -1,7 +1,7 @@
 # Unique network role name
 - id: "contrail/mgmt"
   # Contrail management network (used for XMPP, IF-MAP, and various APIs)
-  default_mapping: "private"
+  default_mapping: "management"
   properties:
     # Should be true if network role requires subnet being set
     subnet: true
